@@ -1,6 +1,6 @@
 # Automated Credit Risk Assessment & Application Workflow
 
-An end-to-end automated pipeline built with **n8n** and **Orange Data Mining** that trains a predictive risk model, ingests financial application data from **Google Sheets**, evaluates applicants through multi-tiered conditional logic, and sends automated decision notifications via **Gmail**.
+An end-to-end automated pipeline built with **n8n** and **Orange Data Mining** that trains a predictive risk model, ingests financial application data from **Google Sheets**, evaluates applicants through multi-tiered conditional logic, and sends automated decision notifications via **Gmail** and **Kommunicate chat**.
 
 ---
 
@@ -9,15 +9,15 @@ An end-to-end automated pipeline built with **n8n** and **Orange Data Mining** t
 The entire automation engine is driven by an asynchronous node-based workflow in n8n. It processes batch applications sequentially, passing them through structured evaluation matrices (`IF` filters) to arrive at three primary states: **Auto-Approve**, **Manual Review**, or **Auto-Reject**.
 
 ### Workflow Visual Map
-<img src="./workflow.jpeg" alt="n8n Automated Decisioning Workflow" width="100%"/>
+<img src="./Screenshot (40).png" alt="n8n Automated Decisioning Workflow" width="100%"/>
 
 ### Workflow Breakdown
 1. **Trigger**: Manually executed or webhook-driven initiation (`When clicking 'Execute workflow'`).
 2. **Data Ingestion**: Pulls raw applicant profiles from a secure Google Sheet ledger.
-3. **Conditional Logic Filters (`If`, `If1`, `If2`, `If3`)**: 
-   * Segregates applications based on risk factors such as credit health, baseline income tiering, and debt leverage ratios.
-   * Out of 40 baseline items initialized, applications are successfully bucketed into specific validation branches.
-4. **Data Synchronization & Notification**: Writes final pipeline updates back to the respective sheets while triggering personalized transactional emails.
+3. **Conditional Logic Filters (`If`, `If1`, `If2`, `If3`)**: 
+   * Segregates applications based on risk factors such as credit health, baseline income tiering, and debt leverage ratios.
+   * Out of 40 baseline items initialized, applications are successfully bucketed into specific validation branches.
+4. **Data Synchronization & Notification**: Writes final pipeline updates back to the respective sheets while triggering personalized conversational or transactional responses.
 
 ---
 
@@ -26,7 +26,7 @@ The entire automation engine is driven by an asynchronous node-based workflow in
 Before applications enter the live automation routing, risk evaluation thresholds are validated using a predictive machine learning pipeline designed in **Orange Data Mining**. This layer tests classification stability to ensure decision logic boundaries are mathematically sound.
 
 ### Data Science Canvas
-<img src="./WhatsApp Image 2026-06-11 at 13.56.30.jpeg" alt="Orange Data Mining Predictive Workflow" width="100%"/>
+<img src="./WhatsApp Image 2026-06-11 at 1.56.29 PM.jpeg" alt="Orange Data Mining Predictive Workflow" width="100%"/>
 
 ### Model Components
 * **File Node**: Ingests historical credit application training profiles.
@@ -53,9 +53,21 @@ The underlying decision logic evaluates financial metrics across multiple column
 
 ---
 
+## 💬 Front-End Conversational Interface (Kommunicate)
+
+Applicants can interact directly with **FinAssist Bot (finbot)** to check application criteria, inquire about loan guidance, and query financial metrics dynamically.
+
+### Conversational Web Widget
+<img src="./WhatsApp Image 2026-06-11 at 2.11.53 PM.jpeg" alt="Kommunicate FinAssist Chat Widget" width="100%"/>
+
+* **Real-time Assistance**: Guides users through financial ratios and initial screening criteria.
+* **Error Resilience**: Includes built-in firewall sync alerts to maintain user-session tracking during intermittent connection gaps.
+
+---
+
 ## 📧 Automated Outputs & Notifications
 
-When an application fails to meet base-level validation criteria (such as falling below standard income minimums), the workflow automatically maps the user's contact information and handles immediate email dispatching.
+When an application fails to meet base-level validation criteria (such as falling below standard income minimums) or requires human follow-up, the workflow automatically maps the target user profiles to handle email dispatches.
 
 ### Example: Automated Reject Notification
 <img src="./Screenshot (39).png" alt="Automated Gmail Reject Email via n8n" width="100%"/>
@@ -71,15 +83,15 @@ When an application fails to meet base-level validation criteria (such as fallin
 
 ### Prerequisites
 * A running instance of **n8n** (Self-hosted or Cloud).
-* **Orange Data Mining** desktop client (for running or adjusting the predictive `.ows` workflow).
-* Google Workspace Account with **Google Sheets API** and **Gmail API** scopes configured via OAuth2 credentials.
+* **Orange Data Mining** desktop client.
+* Google Workspace Account with **Google Sheets API** and **Gmail API** credentials.
+* A **Kommunicate** account with active custom bot webhook integration.
 
 ### Configuration Steps
 1. **Model Evaluation**: Open the Orange workflow file, point the `File` node to your evaluation dataset, and verify model scoring weights.
 2. **Import Workflow**: Copy the JSON representation of the n8n workflow and paste it directly into your n8n canvas interface.
 3. **Authenticate Connections**:
-   * Link your Google Service Account / OAuth credentials to the `Get row(s) in sheet` and `Update row` nodes.
-   * Authorize your mail-sending domain in the Gmail node setup.
-4. **Deploy**: Set the workflow toggle from **Inactive** to **Active** to begin automated production routing. 
-
-change image path / link  so the readme can directely pick my photo 
+   * Link your Google Service Account / OAuth credentials to the sheet nodes.
+   * Authorize your mail-sending domain in the Gmail node setup.
+4. **Link Chatbot Webhook**: Connect the Kommunicate API endpoint to your n8n execution trigger node to sync active chat flows.
+5. **Deploy**: Set the workflow toggle from **Inactive** to **Active** to begin automated production routing. 
